@@ -198,46 +198,6 @@
           } 
           eq(result, 'Unchanged.');
         }
-
-        // Notes and scrap:
-
-          //Options to test that edit() ran properly:
-            // Provide proof that will evaluate to true when compared.
-            // Run edit() to update todo text, compare its updated string to an identical string.
-            // Hard code a supposed-updated text value, compare its variable to an identical string.
-            // Somehow bypass prompt() altogether. Brute force-edit todo text?
-            // Event listener on edit?
-
-          // How can I pseudo-simulate altering the todo text without using prompt() from edit?
-
-          // editButtons[0].click(edit);
-          // // Enter new text into prompt().
-          // var newTodoText = document.getElementById('new-todo-text');
-          // console.log(newTodoText);
-          // console.log(todos[0].todoText);
-          // eq(newTodoText !== todos[0].todoText, true);
-
-          // var newTodoText = todos[0].todoText;
-          // var position = todos[0];
-          // todos[position].todoText = newTodoText;
-          // editButton.click(edit);
-          // eq(newTodoText, todos[0].todoText);
-
-          // Access the edit function using a callback and bind?
-          // editButtons[0].click(edit, function() {
-            // var response = prompt("Enter a response.");
-            // if (response) {
-            //   console.log("Updated!");
-            // } else {
-            //   console.log("Unchanged.");
-            // }
-          // }.bind(this));
-
-          // Worst brute force ever.
-          // todos[0].todoText = 'Item 1 Updated';
-          // var editedTodoResult = todos[0].todoText;
-          // var promptResult = 'Item 1 Updated';
-          // eq(promptResult, editedTodoResult);  
       });
     </script>
   </body>
