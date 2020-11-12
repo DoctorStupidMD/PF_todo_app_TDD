@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = [
+        {todoText: 'Item 1', completed: false},
+        {todoText: 'Item 2', completed: false},
+        {todoText: 'Item 3', completed: false}
+      ];
+
+      console.log(todos); 
+      
+      function add(initialTodoText) {
+        todos.push({todoText: initialTodoText, completed: false});
+        console.log(todos);
+      }
+
+      function edit(position, newTodoText) {
+        todos[position].todoText = newTodoText;
+        console.log(todos);
+      }
+
+      function remove(position) {
+        todos.splice(position, 1);
+        console.log(todos);
+      }
+
+      function toggle(position) {
+        if (todos[position].completed === false) {
+          todos[position].completed = true;
+        } else {
+          todos[position].completed = false;
+        }
+
+        console.log(todos);
+      }
+
+      function displayTodos() {
+        for (var i = 0; i < todos.length; i++) {
+          console.log(todos[i]);
+        }
+      }
+
+      tests({
+        'It should have a function for displaying todos.': function() {
+          displayTodos(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: false}));
+          eq(JSON.stringify(todos[1]), JSON.stringify({todoText: 'Item 2', completed: false}));
+          eq(JSON.stringify(todos[2]), JSON.stringify({todoText: 'Item 3', completed: false}));
+        },
+        'displayTodos should show the todoText and completed property.': function() {
+          displayTodos(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: false}));
+        }
+      });
+    </script>
+  </body>
+</html>

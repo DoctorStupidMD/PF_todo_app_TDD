@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <button id='toggle-all-button'>Toggle all</button>
+    <button id='add-button'>Add</button>
+    <input id='add-input'>
+
+    <ul id='todos-ul'>
+    </ul>
+
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = [
+        {todoText: 'Item 1', completed: false},
+        {todoText: 'Item 2', completed: false},
+        {todoText: 'Item 3', completed: false}
+      ];
+
+      displayTodos(); 
+      
+      function add() {
+        var initialTodoText = addInput.value;
+        todos.push({todoText: initialTodoText, completed: false});
+        addInput.value = '';
+        displayTodos();
+      }
+
+      function edit(event) {
+        var newTodoText = prompt();
+        
+        if (newTodoText !== null && newTodoText !== '') {
+          var position = event.currentTarget.id.split('-')[1];
+          todos[position].todoText = newTodoText;
+          displayTodos();            
+        }
+      }
+
+      function remove(event) {
+        var position = event.currentTarget.id.split('-')[1];
+        todos.splice(position, 1);
+        displayTodos();
+      }
+
+      function toggle(event) {
+        var position = event.currentTarget.id.split('-')[1];
+
+        if (todos[position].completed === false) {
+          todos[position].completed = true;
+        } else {
+          todos[position].completed = false;
+        }
+
+        displayTodos();
+      }
+
+      function displayTodos() {
+        var todosUl = document.getElementById('todos-ul');
+        todosUl.innerHTML = '';
+
+        for (var i = 0; i < todos.length; i++) {
+          var todoLi = document.createElement('li');
+
+          if (todos[i].completed === true) {
+            todoLi.innerText = '[X] ' + todos[i].todoText;
+          } else {
+            todoLi.innerText = '[ ] ' + todos[i].todoText;
+          }
+
+          var toggleButton = document.createElement('button');
+          toggleButton.innerText = 'Toggle';
+          toggleButton.addEventListener('click', toggle);
+          toggleButton.id = 'toggle-' + i;     
+
+          var editButton = document.createElement('button');
+          editButton.innerText = 'Edit';
+          editButton.id = 'edit-' + i;
+          editButton.addEventListener('click', edit);
+
+          var removeButton = document.createElement('button');
+          removeButton.innerText = 'Remove';
+          removeButton.addEventListener('click', remove);
+          removeButton.id = 'remove-' + i; 
+
+          todoLi.appendChild(toggleButton);
+          todoLi.appendChild(editButton);
+          todoLi.appendChild(removeButton);
+          todosUl.appendChild(todoLi);
+        }
+
+        var testButton = document.createElement('button');
+      }
+
+      function toggleAll() {
+        var completedTodos = 0;
+ 
+        for (var i = 0; i < todos.length; i++) {
+          if (todos[i].completed === true) {
+            completedTodos++;
+          }
+        }
+        if (completedTodos === todos.length) {
+          for (var i = 0; i < todos.length; i++) {
+            todos[i].completed = false;
+          }
+        } else {
+          for (var i = 0; i < todos.length; i++) {
+            todos[i].completed = true;
+          }
+        }
+
+        displayTodos();
+      }
+
+      var toggleAllButton = document.getElementById('toggle-all-button');
+      toggleAllButton.addEventListener('click', toggleAll);
+      
+      var addButton = document.getElementById('add-button');
+      var addInput = document.getElementById('add-input');
+      addButton.addEventListener('click', add);
+
+      
+      tests({
+        'Each todo should have its own edit button.': function() {
+          var todosLength = todos.length;
+          var nodeListButtons = document.querySelectorAll('button');
+          var counter = 0;
+          function findEditButtons() {
+            for (var i = 0; i < nodeListButtons.length; i++) {
+              if (nodeListButtons[i].innerHTML === 'Edit') {
+                counter++;
+              }
+            }
+            return counter;
+          }
+          var numberOfEditButtons = findEditButtons();
+          eq(numberOfEditButtons, todosLength);
+        },
+        'The edit buttons should actually work.': function() {
+          var nodeListButtons = document.querySelectorAll('button');
+          var editButtons = [];
+          function findEditButtons() {
+            for (var i = 0; i < nodeListButtons.length; i++) {
+              if (nodeListButtons[i].innerHTML === 'Edit') {
+                editButtons.push(nodeListButtons[i]);
+              }
+            }
+          }
+          findEditButtons();
+
+          var result = prompt('Test test, 1 2 3?');
+          // Must input new text and click 'ok' for this test to pass. Please mind the double prompt.
+          var clickedButton = editButtons[0].click(result); 
+          if (result === null || result === "") {
+            result = "Unchanged."
+          } else {
+            result = "Updated!"
+          }
+          eq(result, 'Updated!');
+        },
+        'It should do nothing if the user hits cancel.': function() {
+          var nodeListButtons = document.querySelectorAll('button');
+          var editButtons = [];
+          function findEditButtons() {
+            for (var i = 0; i < nodeListButtons.length; i++) {
+              if (nodeListButtons[i].innerHTML === 'Edit') {
+                editButtons.push(nodeListButtons[i]);
+              }
+            }
+          }
+          findEditButtons();
+
+          var result = prompt('Test test, 1 2 3?');
+          // Must hit cancel for this test to pass. Please mind the double prompt.
+          var clickedButton = editButtons[0].click(result); 
+          if (result === null) {
+            result = "Unchanged."
+          } 
+          eq(result, 'Unchanged.');
+        },
+        'It should do nothing if the user hits ok and the field is empty.': function() {
+          var nodeListButtons = document.querySelectorAll('button');
+          var editButtons = [];
+          function findEditButtons() {
+            for (var i = 0; i < nodeListButtons.length; i++) {
+              if (nodeListButtons[i].innerHTML === 'Edit') {
+                editButtons.push(nodeListButtons[i]);
+              }
+            }
+          }
+          findEditButtons();
+
+          var result = prompt('Test test, 1 2 3?');
+          // Do not enter new text, do click 'ok' for this test to pass. Please mind the double prompt.
+          var clickedButton = editButtons[0].click(result); 
+          if (result === "") {
+            result = "Unchanged."
+          } 
+          eq(result, 'Unchanged.');
+        }
+
+        // Notes and scrap:
+
+          //Options to test that edit() ran properly:
+            // Provide proof that will evaluate to true when compared.
+            // Run edit() to update todo text, compare its updated string to an identical string.
+            // Hard code a supposed-updated text value, compare its variable to an identical string.
+            // Somehow bypass prompt() altogether. Brute force-edit todo text?
+            // Event listener on edit?
+
+          // How can I pseudo-simulate altering the todo text without using prompt() from edit?
+
+          // editButtons[0].click(edit);
+          // // Enter new text into prompt().
+          // var newTodoText = document.getElementById('new-todo-text');
+          // console.log(newTodoText);
+          // console.log(todos[0].todoText);
+          // eq(newTodoText !== todos[0].todoText, true);
+
+          // var newTodoText = todos[0].todoText;
+          // var position = todos[0];
+          // todos[position].todoText = newTodoText;
+          // editButton.click(edit);
+          // eq(newTodoText, todos[0].todoText);
+
+          // Access the edit function using a callback and bind?
+          // editButtons[0].click(edit, function() {
+            // var response = prompt("Enter a response.");
+            // if (response) {
+            //   console.log("Updated!");
+            // } else {
+            //   console.log("Unchanged.");
+            // }
+          // }.bind(this));
+
+          // Worst brute force ever.
+          // todos[0].todoText = 'Item 1 Updated';
+          // var editedTodoResult = todos[0].todoText;
+          // var promptResult = 'Item 1 Updated';
+          // eq(promptResult, editedTodoResult);  
+      });
+    </script>
+  </body>
+</html>

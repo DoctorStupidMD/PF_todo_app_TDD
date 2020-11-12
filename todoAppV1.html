@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = ['Item 1', 'Item 2', 'Item 3'];
+
+      console.log(todos); 
+
+      todos.push('Item 4');
+
+      todos[0] = 'Item 1 updated';
+
+      todos.splice(0, 1);
+
+
+    tests({
+      'It should have a place to store todos.': function() {
+        var todos = [1, 2, 3];
+        eq(todos[0], [1]);
+        eq(todos[1], [2]);
+        eq(todos[2], [3]);
+      },
+      'It should have a way to display todos.': function() {
+        // var todos = [1, 2, 3];
+        // console.log(todos);
+        // eq(todos[0], 1);
+        // eq(todos[1], 2);
+        // eq(todos[2], 3);
+        fail();
+      },
+      'It should have a way to add a todo.': function() {
+        todos.push('Item 4');
+        eq(todos[3], 'Item 4');
+      },
+      'It should have a way to edit a todo.': function() {
+        todos[0] = 'Item 1 updated';
+        eq(todos[0], 'Item 1 updated');
+      },
+      'It should have a way to remove a todo.': function() {
+        var todos = ['Item 1', 'Item 2', 'Item 3'];
+        todos.splice(0, 1);
+        eq(todos[0], 'Item 2');
+        eq(todos[1], 'Item 3');
+      }
+    });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = [
+        {todoText: 'Item 1', completed: false},
+        {todoText: 'Item 2', completed: true},
+        {todoText: 'Item 3', completed: false}
+      ];
+
+      console.log(todos); 
+      
+      function add(initialTodoText) {
+        todos.push({todoText: initialTodoText, completed: false});
+        console.log(todos);
+      }
+
+      function edit(position, newTodoText) {
+        todos[position].todoText = newTodoText;
+        console.log(todos);
+      }
+
+      function remove(position) {
+        todos.splice(position, 1);
+        console.log(todos);
+      }
+
+      function toggle(position) {
+        if (todos[position].completed === false) {
+          todos[position].completed = true;
+        } else {
+          todos[position].completed = false;
+        }
+
+        console.log(todos);
+      }
+
+      tests({
+        'It should have a function to toggle a todo to true.': function() {
+          toggle(0);
+          eq(todos[0].completed, true);
+        }, 
+        'It should have a function to toggle a todo to false.': function() {
+          toggle(1);
+          eq(todos[1].completed, false);
+        }
+      });
+    </script>
+  </body>
+</html>

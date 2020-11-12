@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = ['Item 1', 'Item 2', 'Item 3'];
+
+      console.log(todos); 
+      
+      function add(todo) {
+        todos.push(todo);
+        console.log(todos);
+      }
+
+      function edit(position, newValue) {
+        todos[position] = newValue;
+        console.log(todos);
+      }
+
+      function remove(position) {
+        todos.splice(position, 1);
+        console.log(todos);
+      }
+
+      tests({
+        'It should have a function to add a todo.': function() {
+          add('Item 4');
+          eq(todos[3], 'Item 4');
+        },
+        'It should have a function to edit a todo.': function() {
+          edit(0, 'Item 1 edited');
+          eq(todos[0], 'Item 1 edited');
+        },
+        'It should have a function to remove a todo.': function() {
+          remove(0);
+          eq(todos[0], 'Item 2');
+        }     
+      });        
+    </script>
+  </body>
+</html>

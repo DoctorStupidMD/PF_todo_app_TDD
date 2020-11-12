@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = [
+        {todoText: 'Item 1', completed: false},
+        {todoText: 'Item 2', completed: false},
+        {todoText: 'Item 3', completed: false}
+      ];
+
+      console.log(todos); 
+      
+      function add(initialTodoText) {
+        todos.push({todoText: initialTodoText, completed: false});
+        console.log(todos);
+      }
+
+      function edit(position, newTodoText) {
+        todos[position].todoText = newTodoText;
+        console.log(todos);
+      }
+
+      function remove(position) {
+        todos.splice(position, 1);
+        console.log(todos);
+      }
+
+      function toggle(position) {
+        if (todos[position].completed === false) {
+          todos[position].completed = true;
+        } else {
+          todos[position].completed = false;
+        }
+
+        console.log(todos);
+      }
+
+      function displayTodos() {
+        for (var i = 0; i < todos.length; i++) {
+          console.log(todos[i]);
+        }
+      }
+
+      function toggleAll(todos) {
+        var completedTodos = 0;
+ 
+        for (var i = 0; i < todos.length; i++) {
+          if (todos[i].completed === true) {
+            completedTodos++;
+          }
+        }
+        if (completedTodos === todos.length) {
+          for (var i = 0; i < todos.length; i++) {
+            todos[i].completed = false;
+          }
+        } else {
+          for (var i = 0; i < todos.length; i++) {
+            todos[i].completed = true;
+          }
+        }
+
+        displayTodos();
+      }   
+      
+      tests({
+        'It should have a function for toggling all todos.': function() {
+          toggleAll(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: true}));
+          eq(JSON.stringify(todos[1]), JSON.stringify({todoText: 'Item 2', completed: true}));
+          eq(JSON.stringify(todos[2]), JSON.stringify({todoText: 'Item 3', completed: true}));
+        },
+        'If everything is false, it should change everything to true.': function() {
+          var todos = [
+            {todoText: 'Item 1', completed: false},
+            {todoText: 'Item 2', completed: false},
+            {todoText: 'Item 3', completed: false}
+          ];
+          toggleAll(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: true}));
+          eq(JSON.stringify(todos[1]), JSON.stringify({todoText: 'Item 2', completed: true}));
+          eq(JSON.stringify(todos[2]), JSON.stringify({todoText: 'Item 3', completed: true}));
+        },
+        'If everything is true, it should change everything to false.': function() {
+          var todos = [
+            {todoText: 'Item 1', completed: true},
+            {todoText: 'Item 2', completed: true},
+            {todoText: 'Item 3', completed: true}
+          ];
+          toggleAll(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: false}));
+          eq(JSON.stringify(todos[1]), JSON.stringify({todoText: 'Item 2', completed: false}));
+          eq(JSON.stringify(todos[2]), JSON.stringify({todoText: 'Item 3', completed: false}));
+        },
+        'If mixed, it should change everything to true.': function() {
+          var todos = [
+            {todoText: 'Item 1', completed: true},
+            {todoText: 'Item 2', completed: false},
+            {todoText: 'Item 3', completed: true}
+          ];
+          toggleAll(todos);
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1', completed: true}));
+          eq(JSON.stringify(todos[1]), JSON.stringify({todoText: 'Item 2', completed: true}));
+          eq(JSON.stringify(todos[2]), JSON.stringify({todoText: 'Item 3', completed: true}));
+        }
+      });
+    </script>
+  </body>
+</html>

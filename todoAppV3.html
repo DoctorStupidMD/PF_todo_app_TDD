@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+  <body>
+    <script src="../simpletest.js"></script>
+    <script>
+      var todos = [
+        {todoText: 'Item 1', completed: false},
+        {todoText: 'Item 2', completed: false},
+        {todoText: 'Item 3', completed: false}
+      ];
+
+      console.log(todos); 
+      
+      function add(initialTodoText) {
+        todos.push({todoText: initialTodoText, completed: false});
+        console.log(todos);
+      }
+
+      function edit(position, newTodoText) {
+        todos[position].todoText = newTodoText;
+        console.log(todos);
+      }
+
+      function remove(position) {
+        todos.splice(position, 1);
+        console.log(todos);
+      }
+
+      tests({
+        'It should initialise the todos variable with objects.': function() {
+          var todos = [{}];
+          eq(typeof(todos), 'object');
+        }, 
+        'The add function should add objects.': function() {
+          add({});
+          eq(todos.length, 4);
+          eq(JSON.stringify(todos[3]), JSON.stringify({"todoText":{},"completed":false}));
+        },
+        'The edit function should edit objects.': function() {
+          edit(0, 'Item 1 edited');
+          eq(JSON.stringify(todos[0]), JSON.stringify({todoText: 'Item 1 edited', completed: false}));
+        }    
+      });  
+    </script>
+  </body>
+</html>
